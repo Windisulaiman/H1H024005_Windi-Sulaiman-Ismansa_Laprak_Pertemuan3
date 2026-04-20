@@ -2,8 +2,7 @@
 
 ## 1. Jelaskan proses dari input keyboard hingga LED menyala/mati!
 
-Ketika pengguna mengetik karakter di Serial Monitor dan menekan Enter, karakter tersebut dikirim melalui USB ke buffer UART Arduino. `Serial.available()` mendeteksi bahwa buffer tidak kosong, lalu `Serial.read()` mengambil 1 karakter dari buffer dan menyimpannya ke variabel `data`. Program mengevaluasi nilai `data`: jika `'1'`, fungsi `digitalWrite(PIN_LED, HIGH)` mengalirkan arus ke pin 12 sehingga LED menyala; jika `'0'`, `digitalWrite(PIN_LED, LOW)` memutus arus sehingga LED mati.
-
+Saat pengguna mengetik karakter di Serial Monitor dan menekan Enter, data tersebut dikirimkan melalui koneksi USB menuju buffer penerima UART pada Arduino. Di dalam loop(), Serial.available() memeriksa apakah buffer tersebut berisi data — jika ya, Serial.read() mengambil satu karakter dan menyimpannya ke variabel data. Karakter ini kemudian dievaluasi: apabila bernilai '1', maka digitalWrite(PIN_LED, HIGH) dieksekusi sehingga arus mengalir ke pin 12 dan LED menyala; apabila bernilai '0', maka digitalWrite(PIN_LED, LOW) dieksekusi sehingga arus terputus dan LED mati.
 ---
 
 ## 2. Mengapa digunakan Serial.available() sebelum membaca data? Apa yang terjadi jika baris tersebut dihilangkan? 
@@ -78,6 +77,6 @@ void loop() {
 **yang digunakan adalah `millis()`**
 
 Penjelasan:
-`delay()` memblokir seluruh eksekusi program. Selama jeda itu, `Serial.available()` tidak dicek, sehingga input `'0'` atau `'1'` dari pengguna tidak akan diproses sampai delay selesai. Sistem menjadi tidak responsif.
+`delay()` bersifat blocking ia menghentikan eksekusi seluruh program selama durasi yang ditentukan. Konsekuensinya, selama penundaan berlangsung, bagian kode yang memeriksa `Serial.available()` tidak pernah dieksekusi, sehingga setiap perintah yang dikirim pengguna pada saat itu akan diabaikan hingga delay berakhir. Sistem kehilangan responsivitasnya.
 
-`millis()` tidak memblokir. Program terus menjalankan `loop()` secara penuh setiap siklus. Perubahan state LED hanya terjadi ketika selisih waktu antara `millis()` sekarang dan `waktuSebelumnya` sudah melewati `intervalBlink`. Akibatnya, Serial tetap terbaca di setiap iterasi dan perintah baru langsung diproses tanpa menunggu kedip selesai.
+sebaliknya `millis()` bekerja secara non-blocking  ia hanya mencatat dan membandingkan timestamp tanpa menghentikan alur program. Setiap siklus loop() tetap berjalan penuh, dan pergantian state LED hanya dipicu ketika selisih antara nilai `millis()` saat ini dengan waktuSebelumnya telah mencapai intervalBlink. Dengan cara ini, pembacaan serial tetap aktif di setiap iterasi dan perintah baru dapat langsung direspons kapan pun tanpa harus menunggu satu siklus kedip selesai.
