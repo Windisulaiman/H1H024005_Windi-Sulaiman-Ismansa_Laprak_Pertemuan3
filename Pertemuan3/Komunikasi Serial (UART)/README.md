@@ -1,9 +1,8 @@
 # Pertanyaan Praktikum Percobaan 3A: Komunikasi Serial (UART)
 
-## 1. Jelaskan proses dari input keyboard hingga LED menyala/mati!
+## 1. Jelaskan proses dari input keyboard hingga LED menyala/mati!  
 
-Saat pengguna mengetik karakter di Serial Monitor dan menekan Enter, data tersebut dikirimkan melalui koneksi USB menuju buffer penerima UART pada Arduino. Di dalam loop(), Serial.available() memeriksa apakah buffer tersebut berisi data — jika ya, Serial.read() mengambil satu karakter dan menyimpannya ke variabel data. Karakter ini kemudian dievaluasi: apabila bernilai '1', maka digitalWrite(PIN_LED, HIGH) dieksekusi sehingga arus mengalir ke pin 12 dan LED menyala; apabila bernilai '0', maka digitalWrite(PIN_LED, LOW) dieksekusi sehingga arus terputus dan LED mati.
----
+<p>Saat pengguna mengetik karakter di Serial Monitor dan menekan Enter, data tersebut dikirimkan melalui koneksi USB menuju buffer penerima UART pada Arduino. Di dalam loop(), Serial.available() memeriksa apakah buffer tersebut berisi data — jika ya, Serial.read() mengambil satu karakter dan menyimpannya ke variabel data. Karakter ini kemudian dievaluasi: apabila bernilai '1', maka digitalWrite(PIN_LED, HIGH) dieksekusi sehingga arus mengalir ke pin 12 dan LED menyala; apabila bernilai '0', maka digitalWrite(PIN_LED, LOW) dieksekusi sehingga arus terputus dan LED mati.</p>
 
 ## 2. Mengapa digunakan Serial.available() sebelum membaca data? Apa yang terjadi jika baris tersebut dihilangkan? 
 
@@ -74,7 +73,7 @@ void loop() {
 
 ## 4. Tentukan apakah menggunakan delay() atau milis()! Jelaskan pengaruhnya terhadap sistem!
 
-**yang digunakan adalah `millis()`**
+**Yang digunakan adalah `millis()`**
 
 Penjelasan:
 `delay()` bersifat blocking ia menghentikan eksekusi seluruh program selama durasi yang ditentukan. Konsekuensinya, selama penundaan berlangsung, bagian kode yang memeriksa `Serial.available()` tidak pernah dieksekusi, sehingga setiap perintah yang dikirim pengguna pada saat itu akan diabaikan hingga delay berakhir. Sistem kehilangan responsivitasnya.
